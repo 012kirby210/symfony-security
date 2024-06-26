@@ -30,18 +30,18 @@ class Question
     #[ORM\Column(type: Types::TEXT)]
     private string $question;
 
-    #[ORM\Column(type: Types::DATETIME_IMMUTABLE, nullable: true)]
-    private \DateTimeInterface $askedAt;
+    #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
+    private ?\DateTimeInterface $askedAt;
 
     #[ORM\Column(type: Types::INTEGER)]
     private int $votes = 0;
 
     #[ORM\OneToMany(mappedBy: 'question', targetEntity: Answer::class, fetch: "EXTRA_LAZY")]
     #[ORM\OrderBy(["createdAt" => "DESC"])]
-    private PersistentCollection $answers;
+    private $answers;
 
     #[ORM\OneToMany( mappedBy: "question", targetEntity: QuestionTag::class)]
-    private PersistentCollection $questionTags;
+    private $questionTags;
 
     public function __construct()
     {
