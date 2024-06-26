@@ -18,7 +18,7 @@ class Tag
     private ?int $id;
 
     #[ORM\Column(type: Types::STRING, length: 255)]
-    private $name;
+    private string $name;
 
     public function getId(): ?int
     {
