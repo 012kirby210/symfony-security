@@ -15,7 +15,7 @@ use Symfony\Component\Security\Http\Authenticator\AbstractAuthenticator;
 use Symfony\Component\Security\Http\Authenticator\Passport\Badge\UserBadge;
 use Symfony\Component\Security\Http\Authenticator\Passport\Credentials\CustomCredentials;
 use Symfony\Component\Security\Http\Authenticator\Passport\Passport;
-use Symfony\Component\Security\Http\Authenticator\Passport\SelfValidatingPassport;
+use Symfony\Component\Security\Http\SecurityRequestAttributes;
 
 class LoginFormAuthenticator extends AbstractAuthenticator
 {
@@ -55,7 +55,11 @@ class LoginFormAuthenticator extends AbstractAuthenticator
 
     public function onAuthenticationFailure(Request $request, AuthenticationException $exception): ?Response
     {
-        dd('failure');
+        $request->getSession()->set(SecurityRequestAttributes::AUTHENTICATION_ERROR, $exception);
+
+        return new RedirectResponse(
+            $this->router->generate('app_login')
+        );
     }
 
     //    public function start(Request $request, AuthenticationException $authException = null): Response
