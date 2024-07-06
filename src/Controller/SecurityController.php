@@ -17,4 +17,10 @@ class SecurityController extends AbstractController
             ]
         );
     }
+
+    #[Route('/logout', name: 'app_logout')]
+    public function logout(AuthenticationUtils $authenticationUtils): Response
+    {
+        throw new \Exception('logout() should not be called!');
+    }
 }
