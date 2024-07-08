@@ -13,7 +13,7 @@ use Symfony\Component\Security\Core\Exception\AuthenticationException;
 use Symfony\Component\Security\Core\Exception\UserNotFoundException;
 use Symfony\Component\Security\Http\Authenticator\AbstractAuthenticator;
 use Symfony\Component\Security\Http\Authenticator\Passport\Badge\UserBadge;
-use Symfony\Component\Security\Http\Authenticator\Passport\Credentials\CustomCredentials;
+use Symfony\Component\Security\Http\Authenticator\Passport\Credentials\PasswordCredentials;
 use Symfony\Component\Security\Http\Authenticator\Passport\Passport;
 use Symfony\Component\Security\Http\SecurityRequestAttributes;
 
@@ -42,9 +42,7 @@ class LoginFormAuthenticator extends AbstractAuthenticator
                 }
                 return $user;
             }),
-            new CustomCredentials(function ($credentials, User $user){
-                return "tada" === $credentials;
-            }, $user_password)
+            new PasswordCredentials($user_password)
         );
     }
 
