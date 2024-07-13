@@ -14,6 +14,7 @@ use Symfony\Component\Security\Core\Exception\UserNotFoundException;
 use Symfony\Component\Security\Csrf\CsrfToken;
 use Symfony\Component\Security\Http\Authenticator\AbstractAuthenticator;
 use Symfony\Component\Security\Http\Authenticator\Passport\Badge\CsrfTokenBadge;
+use Symfony\Component\Security\Http\Authenticator\Passport\Badge\RememberMeBadge;
 use Symfony\Component\Security\Http\Authenticator\Passport\Badge\UserBadge;
 use Symfony\Component\Security\Http\Authenticator\Passport\Credentials\PasswordCredentials;
 use Symfony\Component\Security\Http\Authenticator\Passport\Passport;
@@ -47,7 +48,8 @@ class LoginFormAuthenticator extends AbstractAuthenticator
             }),
             new PasswordCredentials($user_password),
             [
-                new CsrfTokenBadge('authenticate', $crsf_token)
+                new CsrfTokenBadge('authenticate', $crsf_token),
+                new RememberMeBadge(),
             ]
         );
     }
