@@ -49,7 +49,7 @@ class LoginFormAuthenticator extends AbstractAuthenticator
             new PasswordCredentials($user_password),
             [
                 new CsrfTokenBadge('authenticate', $crsf_token),
-                new RememberMeBadge(),
+                (new RememberMeBadge())->enable(),
             ]
         );
     }
