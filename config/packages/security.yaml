@@ -17,9 +17,14 @@ security:
         main:
             lazy: true
             provider: app_user_provider
-            custom_authenticator: App\Security\LoginFormAuthenticator
+#            custom_authenticator: App\Security\LoginFormAuthenticator
             logout: true
-            entry_point: App\Security\LoginFormAuthenticator
+#            entry_point: App\Security\LoginFormAuthenticator
+            form_login:
+                login_path: app_login
+                check_path: app_login
+                username_parameter: email
+                password_parameter: password
 
             # activate different ways to authenticate
             # https://symfony.com/doc/current/security.html#the-firewall
