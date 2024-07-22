@@ -14,6 +14,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 class QuestionController extends AbstractController
 {
@@ -46,6 +47,7 @@ class QuestionController extends AbstractController
     /**
      * @Route("/questions/new")
      */
+    #[IsGranted("ROLE_USER")]
     public function new()
     {
         return new Response('Sounds like a GREAT feature for V2!');
