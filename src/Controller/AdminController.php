@@ -5,6 +5,7 @@ namespace App\Controller;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route as AttRoute;
 use Symfony\UX\Chartjs\Builder\ChartBuilderInterface;
 use Symfony\UX\Chartjs\Model\Chart;
 
@@ -53,5 +54,11 @@ class AdminController extends AbstractController
             'chart' => $chart,
             'chart2' => $chart2,
         ]);
+    }
+
+    #[AttRoute('/admin/login')]
+    public function adminLogin()
+    {
+        return new Response("Pretend admn login page that should be public");
     }
 }
