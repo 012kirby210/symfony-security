@@ -8,7 +8,7 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 class UserController extends BaseController
 {
-    #[Route('/api/me', methods: ['GET'])]
+    #[Route('/api/me', name: 'api_me', methods: ['GET'])]
     #[IsGranted('IS_AUTHENTICATED_REMEMBERED')]
     public function apiMe()
     {
