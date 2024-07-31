@@ -38,7 +38,6 @@ security:
             remember_me:
                 secret: '%kernel.secret%'
                 lifetime: 3600
-                #always_remember_me: true
                 signature_properties: [password]
                 always_remember_me: true
 
