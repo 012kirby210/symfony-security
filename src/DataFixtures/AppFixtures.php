@@ -5,6 +5,7 @@ namespace App\DataFixtures;
 use App\Entity\Answer;
 use App\Entity\Question;
 use App\Entity\Tag;
+use App\Entity\User;
 use App\Factory\AnswerFactory;
 use App\Factory\QuestionFactory;
 use App\Factory\QuestionTagFactory;
@@ -17,9 +18,23 @@ class AppFixtures extends Fixture
 {
     public function load(ObjectManager $manager)
     {
+
+        UserFactory::createOne([
+            'email' => 'abraca_admin@example.com',
+            'roles' => ['ROLE_ADMIN']
+        ]);
+        UserFactory::createOne([
+            'email' => 'abraca_user@example.com',
+        ]);
+        UserFactory::createMany(10);
+
         TagFactory::createMany(100);
 
-        $questions = QuestionFactory::createMany(20);
+        $questions = QuestionFactory::createMany(20, function(){
+            return [
+                'owner' => UserFActory::random()
+            ];
+        });
 
         QuestionTagFactory::createMany(100, function() {
             return [
@@ -45,14 +60,7 @@ class AppFixtures extends Fixture
             ];
         })->needsApproval()->many(20)->create();
 
-        UserFactory::createOne([
-            'email' => 'abraca_admin@example.com',
-            'roles' => ['ROLE_ADMIN']
-        ]);
-        UserFactory::createOne([
-            'email' => 'abraca_user@example.com',
-        ]);
-        UserFactory::createMany(10);
+
 
         $manager->flush();
     }
