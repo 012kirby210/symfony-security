@@ -34,13 +34,15 @@
                         <div class="col">
                             <div class="d-flex justify-content-between">
                                 <h1 class="q-title-show">{{ question.name }}</h1>
-                                <a href="{{ path('app_question_edit', { slug: question.slug }) }}"
-                                   class="btn btn-secondary btn-small mb-2">edit</a>
+                                {% if is_granted('EDIT', question) %}
+                                    <a href="{{ path('app_question_edit', { slug: question.slug }) }}"
+                                       class="btn btn-secondary btn-small mb-2">edit</a>
+                                {% endif %}
                             </div>
                             <div class="q-display p-3">
                                 <i class="fa fa-quote-left mr-3"></i>
                                 <p class="d-inline">{{ question.question|parse_markdown }}</p>
-                                <p class="pt-4"><strong>--{{ question.owner.displayName }}a</strong></p>
+                                <p class="pt-4"><strong>--{{ question.owner.displayName }}(){{ question.owner.email }}</strong></p>
                             </div>
                         </div>
                     </div>
