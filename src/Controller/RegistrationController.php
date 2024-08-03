@@ -12,6 +12,7 @@ use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Authentication\UserAuthenticatorInterface;
 use Symfony\Component\Security\Http\Authenticator\FormLoginAuthenticator;
+use SymfonyCasts\Bundle\VerifyEmail\VerifyEmailHelperInterface;
 
 class RegistrationController extends AbstractController
 {
@@ -19,8 +20,7 @@ class RegistrationController extends AbstractController
     public function register(Request $request,
                              UserPasswordHasherInterface $userPasswordHasher,
                              EntityManagerInterface $entityManager,
-                             UserAuthenticatorInterface $userAuthenticator,
-                             FormLoginAuthenticator $formLoginAuthenticator
+                             VerifyEmailHelperInterface $verifyEmailHelper
 
     ): Response
     {
@@ -40,18 +40,27 @@ class RegistrationController extends AbstractController
             $entityManager->persist($user);
             $entityManager->flush();
 
-            return $userAuthenticator->authenticateUser($user,
-                $formLoginAuthenticator,
-                $request
+            $signatureComponent = $verifyEmailHelper->generateSignature(
+                'app_verify_email',
+                $user->getId(),
+                $user->getEmail(),
+                ['id' => $user->getId()]
             );
 
-            // do anything else you need here, like send an email
+            // TODO: send this as an email
+            $this->addFlash('success','Confirm your email at : ' . $signatureComponent->getSignedUrl());
 
-//            return $this->redirectToRoute('app_homepage');
+            return $this->redirectToRoute('app_homepage');
         }
 
         return $this->render('registration/register.html.twig', [
             'registrationForm' => $form,
         ]);
+    }
+
+    #[Route("/verify", name:"app_verify_email")]
+    public function verifyUserEmail()
+    {
+
     }
 }
