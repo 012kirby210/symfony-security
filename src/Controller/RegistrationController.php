@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\User;
 use App\Form\RegistrationFormType;
+use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -12,6 +13,7 @@ use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Authentication\UserAuthenticatorInterface;
 use Symfony\Component\Security\Http\Authenticator\FormLoginAuthenticator;
+use SymfonyCasts\Bundle\VerifyEmail\Exception\VerifyEmailExceptionInterface;
 use SymfonyCasts\Bundle\VerifyEmail\VerifyEmailHelperInterface;
 
 class RegistrationController extends AbstractController
@@ -59,8 +61,29 @@ class RegistrationController extends AbstractController
     }
 
     #[Route("/verify", name:"app_verify_email")]
-    public function verifyUserEmail()
+    public function verifyUserEmail(Request $request,
+                                    VerifyEmailHelperInterface $verifyEmailHelper,
+                                    UserRepository $userRepository,
+                                    EntityManagerInterface $entityManager): Response
     {
+        $user = $userRepository->findOneBy(['id' => $request->query->get('id')]);
+        if( null === $user ){
+            $this->createNotFoundException();
+        }
 
+        try{
+            $verifyEmailHelper->validateEmailConfirmationFromRequest($request, $user->getId(), $user->getEmail());
+        }catch(VerifyEmailExceptionInterface $e){
+            $this->addFlash('error',$e->getReason());
+
+            return $this->redirectToRoute('app_register');
+        }
+
+        $user->isVerified(true);
+        $entityManager->persist($user);
+        $entityManager->flush();
+
+        $this->addFlash('success','Account verified! You can now log in!');
+        return $this->redirectToRoute('app_login');
     }
 }
