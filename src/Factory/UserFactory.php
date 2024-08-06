@@ -58,6 +58,7 @@ final class UserFactory extends PersistentProxyObjectFactory
             'plainPassword' => 'tada',
             'roles' => [],
             'isVerified' => true,
+            'totpsecret' => false,
         ];
     }
 
