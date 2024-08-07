@@ -38,7 +38,7 @@ class SecurityController extends BaseController
             $entityManager->flush();
         }
 
-        dd($user);
+        return $this->render('security/enable2fa.html.twig');
     }
 
 }
